@@ -23,6 +23,9 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
+body.no-scroll {
+  overflow: hidden; /* Prevent scrolling when menu is open */
+}
 body::-webkit-scrollbar {
   width: 20px;
 }
@@ -108,7 +111,99 @@ header nav .links {
   position: absolute;
   left: 50%;
   transform: translateX(-45%);
+  z-index: 100; /* Ensure links are above other content */
 }
+
+/* Burger Menu Styles */
+.burger-menu {
+  display: none; /* Hidden by default, shown on smaller screens */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  z-index: 101; /* Ensure burger icon is above links */
+}
+
+.burger-menu .bar {
+  width: 100%;
+  height: 3px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Animation for burger menu */
+.burger-menu.active .bar:nth-child(1) {
+  transform: translateY(11px) rotate(45deg);
+}
+
+.burger-menu.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu.active .bar:nth-child(3) {
+  transform: translateY(-11px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  header nav .links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a25d9; /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-100%); /* Hide off-screen initially */
+    transition: transform 0.5s ease-in-out;
+    z-index: 99; /* Below burger menu but above content */
+  }
+
+  header nav .links.active {
+    transform: translateX(0); /* Slide in */
+  }
+
+  header nav .links .ul {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  header nav .links .ul .mega .mega-menu {
+    position: static; /* Adjust for mobile */
+    transform: none;
+    visibility: visible;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+
+  header nav .links .ul .mega .mega-menu .box {
+    width: auto;
+    padding: 10px 0;
+  }
+
+  header nav .links .ul .mega .mega-menu .box a {
+    padding: 10px 0;
+  }
+
+  header nav .rightlinks {
+    display: none; /* Hide login button on mobile when menu is open */
+  }
+
+  .burger-menu {
+    display: flex; /* Show burger menu on smaller screens */
+  }
+}
+
+
 header nav .links .ul {
   display: flex;
   align-items: center;
@@ -244,7 +339,7 @@ header nav .rightlinks a:hover {
 }
 .home .grid .left {
   width: 50%;
-  height: 500px;
+  min-height: 400px; /* Adjusted for responsiveness */
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -256,6 +351,16 @@ header nav .rightlinks a:hover {
   background-size: cover;
   transform-origin: 50% 65%;
   transition: transform 5s, filter 3s ease-in-out;
+}
+@media (max-width: 768px) {
+  .home .grid {
+    flex-direction: column;
+    flex-wrap: wrap; /* Stack left and right sections on smaller screens */
+  }
+  .home .grid .left {
+    width: 100%;
+    min-height: 300px;
+  }
 }
 .home .grid .left h3 {
   font-size: 28px;
@@ -276,7 +381,12 @@ header nav .rightlinks a:hover {
   justify-content: center;
   flex-direction: column;
   gap: 20px;
-  height: 500px;
+  min-height: 300px;
+}
+@media (max-width: 768px) {
+  .home .grid .right {
+    width: 100%; /* Full width on smaller screens */
+  }
 }
 .home .grid .right h3 {
   font-size: 22px;
@@ -297,12 +407,12 @@ header nav .rightlinks a:hover {
   width: 100%;
   gap: 20px;
   height: 50%;
+
 }
 .home .grid .right .up .box {
   width: 50%;
   background-color: #242435;
   height: 100%;
-  width: 50%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -311,6 +421,14 @@ header nav .rightlinks a:hover {
   border-radius: 5px;
   transform-origin: 50% 65%;
   transition: transform 5s, filter 3s ease-in-out;
+}
+@media (max-width: 480px) {
+  .home .grid .right .up {
+    flex-wrap: wrap;
+  }
+  .home .grid .right .up .box {
+    width: 100%; /* Full width on extra small screens */
+  }
 }
 .home .grid .right .up .one {
   background-image: url(sources/images/dream.jpg);
@@ -340,7 +458,6 @@ header nav .rightlinks a:hover {
   width: 50%;
   background-color: #242435;
   height: 100%;
-  width: 50%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -351,6 +468,14 @@ header nav .rightlinks a:hover {
   background-size: cover;
   transform-origin: 50% 65%;
   transition: transform 5s, filter 3s ease-in-out;
+}
+@media (max-width: 480px) {
+  .home .grid .right .bottom .box {
+    width: 100%; /* Full width on extra small screens */
+  }
+    .home .grid .right .bottom {
+    flex-wrap: wrap;
+  }
 }
 .home .grid .right .bottom .three {
   background-image: url(sources/images/rocket.jpg);
@@ -379,11 +504,13 @@ header nav .rightlinks a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 .home .features .boxes .box {
   padding: 30px;
-  height: 165;
-  width: 189;
+  height: 165px; /* Fixed height for consistency */
+  flex: 1 1 auto; /* Allow boxes to grow and shrink */
+  min-width: 150px; /* Minimum width before wrapping */
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -406,6 +533,8 @@ header nav .rightlinks a:hover {
 }
 .home .features .boxes .box img {
   width: 100px;
+  max-width: 100%; /* Ensure images scale down */
+  height: auto;
 }
 .home .features .boxes .box h4 {
   font-size: 20px;
@@ -422,7 +551,7 @@ header nav .rightlinks a:hover {
 .items .content .boxes {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center items when they wrap */
   flex-wrap: wrap;
   gap: 20px;
 }
@@ -432,13 +561,15 @@ header nav .rightlinks a:hover {
   border-radius: 10px;
   box-shadow: rgb(20, 20, 20,0.5) 2px 2px 30px 0;
   margin-bottom: 20px;
+  width: 260px; /* Fixed width for item cards */
 }
 .items .content .boxes .box .image {
   position: relative;
   margin-bottom: 20px;
 }
 .items .content .boxes .box img {
-  width: 220px;
+  width: 100%; /* Make image fill its container */
+  height: auto;
   border-radius: 10px;
   transform-origin: 50% 65%;
   cursor: pointer;
@@ -533,7 +664,8 @@ header nav .rightlinks a:hover {
 .coll .boxes {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center items when they wrap */
+  flex-wrap: wrap;
   gap: 20px;
 }
 .coll .boxes .box {
@@ -548,10 +680,11 @@ header nav .rightlinks a:hover {
 
 }
 .coll .boxes .box .image {
-  width: 203px;
+  width: 100%; /* Make image fill its container */
 }
 .coll .boxes .box .image img {
   width: 100%;
+  height: auto;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -597,8 +730,9 @@ header nav .rightlinks a:hover {
 }
 .sellers .boxes {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start; /* Align items to the start of the cross axis */
+  justify-content: center; /* Center groups when they wrap */
+  flex-wrap: wrap;
   gap: 10px;
 }
 .sellers .boxes .group {
@@ -607,6 +741,8 @@ header nav .rightlinks a:hover {
   justify-content: center;
   flex-direction: column;
   gap: 30px;
+  flex: 1 1 auto; /* Allow groups to grow and shrink */
+  min-width: 280px; /* Minimum width for each group */
 }
 .sellers .boxes .box {
   display: flex;
@@ -616,7 +752,8 @@ header nav .rightlinks a:hover {
   background-color: #242435;
   padding: 20px 30px;
   border-radius: 5px;
-  width: 265px;
+  width: 100%; /* Make box fill its group width */
+  max-width: 300px; /* Max width for individual seller boxes */
 }
 .sellers .boxes .box span {
   font-size: 17px;
@@ -683,13 +820,15 @@ header nav .rightlinks a:hover {
 .steps .cards {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center; /* Center cards when they wrap */
+  flex-wrap: wrap;
+  gap: 20px;
 }
 .steps .cards .card {
-  padding: 40px 40px;
+  padding: 40px;
   background-color: #242435;
-  width: 355px;
+  width: 100%; /* Make card fill its container */
+  max-width: 355px; /* Max width for individual cards */
   height: 355px;
   border-radius: 10px;
   display: flex;
@@ -710,7 +849,7 @@ header nav .rightlinks a:hover {
   background-color: #4158D0;
   padding: 10px;
   border-radius: 10px;
-} 
+}
 .steps .cards .card h3 {
   font-size: 22px;
   color: #ffffff;
@@ -750,7 +889,8 @@ header nav .rightlinks a:hover {
 .articles .boxes {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center boxes when they wrap */
+  flex-wrap: wrap;
   gap: 20px;
 }
 .articles .boxes .box {
@@ -762,12 +902,15 @@ header nav .rightlinks a:hover {
   background-color: #242435;
   padding: 30px 20px;
   border-radius: 10px;
+  width: 100%; /* Make box fill its container */
+  max-width: 370px; /* Max width for individual article boxes */
 }
 .articles .boxes .box .image {
   position: relative;
 }
 .articles .boxes .box .image img {
-  width: 335px;
+  width: 100%;
+  height: auto;
   border-radius: 10px;
 }
 .articles .boxes .box .image .info {
@@ -794,7 +937,7 @@ header nav .rightlinks a:hover {
   font-size: 17px;
   color: #999999;
   font-weight: 700;
-  width: 290px;
+  width: 100%; /* Make paragraph fill its container */
   line-height: 27px;
   margin-bottom: 20px;
 }
@@ -830,7 +973,7 @@ header nav .rightlinks a:hover {
 .team .cards {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center cards when they wrap */
   flex-wrap: wrap;
   gap: 20px;
 }
@@ -843,7 +986,8 @@ header nav .rightlinks a:hover {
   background-color: #242435;
   padding: 30px 20px;
   border-radius: 10px;
-  width: 270px;
+  width: 100%; /* Make card fill its container */
+  max-width: 270px; /* Max width for individual team cards */
   margin-bottom: 10px;
 }
 .team .cards .card .main {
@@ -942,7 +1086,7 @@ header nav .rightlinks a:hover {
 .services .cards {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center cards when they wrap */
   flex-wrap: wrap;
   gap: 20px
 }
@@ -963,7 +1107,8 @@ header nav .rightlinks a:hover {
   padding: 30px 20px;
   padding-bottom: 0px;
   border-radius: 10px;
-  width: 370px;
+  width: 100%; /* Make card fill its container */
+  max-width: 370px; /* Max width for individual service cards */
   margin-bottom: 10px;
   position: relative;
 }
@@ -1074,19 +1219,26 @@ header nav .rightlinks a:hover {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 570px;
+  height: auto; /* Changed to auto to allow content to dictate height */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 .contact .page .info {
   width: 30%;
-  height: 100%;
+  min-height: 570px; /* Maintain minimum height */
   background-color: #2a2a46;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
   gap: 30px;
-  padding: 30px 30px;
-  padding-bottom: 0px;
+  padding: 30px;
+  padding-bottom: 20px; /* Adjusted padding */
+}
+@media (max-width: 992px) {
+  .contact .page .info {
+    width: 100%; /* Full width on tablet and smaller */
+    min-height: auto; /* Remove fixed height on smaller screens */
+  }
 }
 .contact .page .info .main {
   margin-bottom: 10px;
@@ -1171,14 +1323,19 @@ header nav .rightlinks a:hover {
 }
 .contact .page .form {
   width: 70%;
-  height: 100%;
+  height: auto; /* Changed to auto to allow content to dictate height */
   background-color: #242435;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 40px 40px;
+  padding: 40px;
   gap: 30px;
+}
+@media (max-width: 992px) {
+  .contact .page .form {
+    width: 100%; /* Full width on tablet and smaller */
+  }
 }
 .contact .page .form .inputs {
   width: 100%;
@@ -1186,14 +1343,21 @@ header nav .rightlinks a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 .contact .page .form .input {
-  width: 100%;
+  width: 100%; /* Make input fill its container */
+  flex: 1 1 45%; /* Allow inputs to wrap and take roughly half width */
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
   gap: 15px;
+}
+@media (max-width: 480px) {
+  .contact .page .form .input {
+    flex: 1 1 100%; /* Full width on extra small screens */
+  }
 }
 .contact .page .form .input p {
   font-size: 14px;
@@ -1254,6 +1418,11 @@ footer {
   background-color: #242435;
   margin-top: 100px;
 }
+@media (max-width: 768px) {
+  footer {
+    padding: 40px 20px; /* Adjust padding for smaller screens */
+  }
+}
 footer .footer_content {
   width: 100%;
   display: flex;
@@ -1267,13 +1436,16 @@ footer .footer_content .links {
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 50px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 30px; /* Add gap between wrapped columns */
 }
 footer .footer_content .links .group {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align text to start */
   justify-content: center;
   flex-direction: column;
   gap: 20px;
+  flex: 1 1 200px; /* Allow groups to wrap and take minimum width */
 }
 footer .footer_content .links .group .links {
   width: 100%;
@@ -1302,7 +1474,12 @@ footer .footer_content .email {
   justify-content: space-between;
   flex-direction: column;
   width: 300px;
-  height: 236px;
+  min-height: 236px; /* Maintain minimum height */
+}
+@media (max-width: 768px) {
+  footer .footer_content .email {
+    width: 100%; /* Full width on smaller screens */
+  }
 }
 footer .footer_content .email h3 {
   font-size: 23px;
@@ -1315,7 +1492,7 @@ footer .footer_content .email p {
   line-height: 26px;
 }
 footer .footer_content .email input {
-  width: 115%;
+  width: calc(100% - 50px); /* Adjust width for icon */
   height: 45px;
   border-radius: 10px;
   outline: none;
@@ -1329,11 +1506,12 @@ footer .footer_content .email input {
 }
 footer .footer_content .email .input {
   position: relative;
+  width: 100%; /* Ensure input container takes full width */
 }
 footer .footer_content .email .input .icon {
   position: absolute;
   top: 0;
-  right: -37px;
+  right: 0;
   height: 100%;
   width: 50px;
   padding: 20px;
@@ -1362,6 +1540,9 @@ footer .footer_content .info {
   justify-content: space-between;
   position: relative;
   padding-top: 10px;
+  flex-wrap: wrap; /* Allow wrapping */
+  justify-content: center; /* Center items when wrapped */
+  gap: 20px; /* Add gap between wrapped items */
 }
 footer .footer_content .info::after {
   content: "";
